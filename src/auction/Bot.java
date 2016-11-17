@@ -23,14 +23,11 @@ public class Bot {
     public Strategy getStrategy() {
         return strategy;
     }
-    
 
     public Bid placeBet(Auction auction) {
         Integer updated = strategy.apply(auction.getLastBid());
         if (updated != null) {
-            Bid bid = new Bid(id, owner, System.currentTimeMillis() - auction.getStartTs(), updated);
-            auction.addToHistory(bid);
-            return bid;
+            return new Bid(id, owner, System.currentTimeMillis() - auction.getStartTs(), updated);
         }
         return null;
     }
