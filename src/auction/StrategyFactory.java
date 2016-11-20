@@ -7,9 +7,9 @@ import java.util.Random;
 
 public class StrategyFactory {
 
-    private final Random R = new Random();
+    private static final Random R = new Random();
 
-    public Strategy pickRandomStrategy() {
+    public static Strategy pickRandomStrategy() {
         int strategyId = R.nextInt(3);
         switch (strategyId) {
             case 0:

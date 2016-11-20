@@ -23,16 +23,19 @@ public class Auction {
     private final ExecutorService executorService;
     private long startTs;
     private List<Callable<Bid>> subAuctions;
+    private final List<Watcher> watchers;
 
-    public Auction(List<Bot> bots, int threads, int miniAuctions) {
+    public Auction(List<Bot> bots, int threads, int miniAuctions, List<Watcher> watchers) {
         this.bots = bots;
         this.history = new CopyOnWriteArrayList<>();
         this.miniAuctions = miniAuctions;
+        this.watchers = watchers;
         executorService = Executors.newFixedThreadPool(threads);
         prepareSubAuctions();
     }
 
     public void start(int bids, int startPrice) {
+        history.clear();
         history.add(new Bid(-1, "initPrice", 0, startPrice));
         startTs = System.currentTimeMillis();
         CompletableFuture<Bid> winner = askBestBid(new Bid(-1, "initPrice", -1, startPrice));
@@ -61,6 +64,7 @@ public class Auction {
                     .max((a, b) -> a.getPrice() - b.getPrice());
             if (possibleWinner.isPresent()) {
                 history.add(possibleWinner.get());
+                watchers.forEach(watcher -> watcher.notify(history));
                 future.complete(possibleWinner.get());
             } else {
                 future.complete(previousWinner);

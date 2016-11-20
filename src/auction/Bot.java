@@ -31,7 +31,7 @@ public class Bot {
         }
         return null;
     }
-
+    
     @Override
     public String toString() {
         return "Bot{" + "owner=" + owner + ", id=" + id + ", strategy=" + strategy + '}';
