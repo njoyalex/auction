@@ -8,5 +8,5 @@ public class Watcher {
     public void notify(List<Bid> history){
         System.out.println("ExactlyMyChangeHereOnlyBoo");
     }
-    //test me
+    //test me2
 }
